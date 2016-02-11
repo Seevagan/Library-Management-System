@@ -1,0 +1,88 @@
+CREATE SCHEMA library;
+
+USE library;
+
+	CREATE TABLE Book
+	(
+	  Book_id VARCHAR(10) NOT NULL PRIMARY KEY,
+	  Title varchar(255)
+	);
+
+CREATE TABLE Book_Authors
+(
+  Book_id VARCHAR(10) NOT NULL,
+  Author_name varchar(255),
+  
+  Primary key(Book_id,Author_name),
+  Foreign key (Book_id) REFERENCES Book(Book_id)
+);
+
+CREATE TABLE library_branch(
+  Branch_id INTEGER(1) NOT NULL PRIMARY KEY , 
+  Branch_name VARCHAR(15), 
+  Address VARCHAR(50)
+);	
+
+CREATE TABLE book_copies(
+  Book_id VARCHAR(10) NOT NULL , 
+  Branch_id INTEGER(1) NOT NULL ,
+  No_of_copies INT(1) ,
+  PRIMARY KEY (Book_id,Branch_id) ,
+  FOREIGN KEY (Branch_id) REFERENCES library_branch(Branch_id) ,
+  FOREIGN KEY (Book_id) REFERENCES book(Book_id)
+);
+
+
+CREATE TABLE Borrower(
+  card_no INTEGER(4) NOT NULL PRIMARY KEY ,
+  fname VARCHAR(50),
+  lname VARCHAR(50),
+  address VARCHAR(16),
+  city VARCHAR(10),
+  state VARCHAR(2),
+  phone VARCHAR(14)
+);
+
+
+CREATE TABLE Book_Loans(
+  Book_id VARCHAR(10) NOT NULL,
+  Branch_id INTEGER(1) NOT NULL,
+  card_no INTEGER(4) NOT NULL,
+  Date_out Date,
+  Due_date Date,
+  Date_in Date,
+  CONSTRAINT PK PRIMARY KEY (Book_id,Branch_id,card_no),
+  CONSTRAINT FK_Branchid FOREIGN KEY (Branch_id) REFERENCES library_branch(Branch_id),
+  CONSTRAINT FK_Bookid FOREIGN KEY (Book_id) REFERENCES book(Book_id),
+  CONSTRAINT FK_cardno FOREIGN KEY (card_no) REFERENCES borrower(card_no)
+  );
+  
+ ALTER TABLE Book_Loans DROP FOREIGN KEY FK_Bookid;
+ ALTER TABLE Book_Loans DROP FOREIGN KEY FK_Branchid;
+ ALTER TABLE Book_Loans DROP FOREIGN KEY FK_cardno; 
+ ALTER TABLE Book_Loans DROP PRIMARY KEY;
+ 
+ ALTER TABLE Book_Loans ADD COLUMN Loan_id INTEGER(5) NOT NULL;
+ 
+ ALTER TABLE Book_Loans ADD CONSTRAINT PK_LoanID PRIMARY KEY(Loan_id);
+ 
+ ALTER TABLE Book_Loans 
+ ADD CONSTRAINT FK_Bookid FOREIGN KEY(Book_id) REFERENCES book(Book_id) , 
+ ADD CONSTRAINT FK_Branchid FOREIGN KEY (Branch_id) REFERENCES library_branch(Branch_id),
+ ADD CONSTRAINT FK_cardno FOREIGN KEY (card_no) REFERENCES borrower(card_no);
+ 
+ 
+ 
+   
+
+ALTER TABLE Book_Authors
+ADD COLUMN Fname Varchar(255),
+ADD COLUMN Minit Varchar(1),
+ADD COLUMN Lname Varchar(255);
+
+
+CREATE TABLE fines
+(loan_id  INTEGER(5) NOT NULL,
+fine_amt  DECIMAL(4,2),
+paid Boolean,
+CONSTRAINT FK_LoanID FOREIGN KEY(Loan_ID) REFERENCES Book_Loans(Loan_ID));
