@@ -7,7 +7,7 @@ Database setup instructions:
 1.Open the DB console
 2.Type:
 	> delimiter //
-3.Copy the commands in Creates_and_Triggers.sql file and hit enter this will create 7 tables and 2 triggers as per the Project schema requirement
+3.Copy the commands in schema.txt file and hit enter this will create 7 tables and 2 triggers as per the Project schema requirement
 
 Fornt end set up instructions:	
 1.The application is Java based application developed on NET BEANS IDE version 7.4 and MySQL Server 5.6
